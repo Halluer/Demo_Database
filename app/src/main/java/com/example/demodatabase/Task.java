@@ -1,7 +1,6 @@
 package com.example.demodatabase;
 
 public class Task {
-
     private int id;
     private String description;
     private String date;
@@ -19,3 +18,5 @@ public class Task {
     public String getDate() { return date;}
 
 }
+
+

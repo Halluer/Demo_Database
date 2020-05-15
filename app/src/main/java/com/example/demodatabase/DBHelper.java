@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+
     private static final int DATABASE_VER = 1;
     private static final String DATABASE_NAME = "tasks.db";
 
@@ -21,8 +22,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DESCRIPTION = "description";
     private static final String COLUMN_DATE = "date";
 
-    public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VER);
+    public DBHelper(@Nullable Context context) {
+        super(context, DATABASE_NAME, null ,DATABASE_VER);
     }
 
     @Override
@@ -33,17 +34,21 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COLUMN_DESCRIPTION + " TEXT )";
         db.execSQL(createTableSql);
         Log.i("info" ,"created tables");
+
+
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK);
         // Create table(s) again
         onCreate(db);
-    }
 
+
+    }
     public void insertTask(String description, String date){
+
         // Get an instance of the database for writing
         SQLiteDatabase db = this.getWritableDatabase();
         // We use ContentValues object to store the values for
@@ -58,7 +63,29 @@ public class DBHelper extends SQLiteOpenHelper {
         // Close the database connection
         db.close();
     }
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        String selectQuery = "SELECT " + COLUMN_ID + ", "
+                + COLUMN_DESCRIPTION + ", "
+                + COLUMN_DATE
+                + " FROM " + TABLE_TASK;
 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String description = cursor.getString(1);
+                String date = cursor.getString(2);
+                Task obj = new Task(id, description, date);
+                tasks.add(obj);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return tasks;
+    }
     public ArrayList<String> getTaskContent() {
         // Create an ArrayList that holds String objects
         ArrayList<String> tasks = new ArrayList<String>();
@@ -91,27 +118,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return tasks;
     }
 
-    public ArrayList<Task> getTasks() {
-        ArrayList<Task> tasks = new ArrayList<Task>();
-        String selectQuery = "SELECT " + COLUMN_ID + ", "
-                + COLUMN_DESCRIPTION + ", "
-                + COLUMN_DATE
-                + " FROM " + TABLE_TASK;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String description = cursor.getString(1);
-                String date = cursor.getString(2);
-                Task obj = new Task(id, description, date);
-                tasks.add(obj);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return tasks;
-    }
 }
+
+
+

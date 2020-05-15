@@ -41,7 +41,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         tvDesc = (TextView) rowView.findViewById(R.id.tvDesc);
         tvDate = (TextView) rowView.findViewById(R.id.tvDate);
 
-
         // The parameter "position" is the index of the
         //  row ListView is requesting.
         //  We get back the food at the same index.

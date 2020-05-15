@@ -11,24 +11,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnInsert, btnGetTasks;
     TextView tvResults;
-    ListView lv;
     ArrayAdapter aa;
     ArrayList<Task> task;
+    ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnInsert = findViewById(R.id.btnInsert);
-        btnGetTasks = findViewById(R.id.btnGetTasks);
-        tvResults = findViewById(R.id.tvResults);
-        lv = findViewById(R.id.lv);
+        btnInsert = (Button)findViewById(R.id.btnInsert);
+        btnGetTasks = (Button)findViewById(R.id.btnGetTask);
+        tvResults = (TextView)findViewById(R.id.tvResults);
+        lv = (ListView)findViewById(R.id.lv);
 
         DBHelper db = new DBHelper(MainActivity.this);
         task = db.getTasks();
@@ -42,13 +43,13 @@ public class MainActivity extends AppCompatActivity {
                 // Create the DBHelper object, passing in the
                 // activity's Context
                 DBHelper db = new DBHelper(MainActivity.this);
+
                 // Insert a task
                 db.insertTask("Submit RJ", "25 Apr 2016");
                 db.close();
             }
         });
-
-        btnGetTasks.setOnClickListener(new View.OnClickListener() {
+        btnGetTasks.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 // Create the DBHelper object, passing in the
@@ -64,9 +65,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("Database Content", i +". "+data.get(i));
                     txt += i + ". " + data.get(i) + "\n";
                 }
-                aa.notifyDataSetChanged();
                 tvResults.setText(txt);
             }
         });
+//done
+
     }
 }
